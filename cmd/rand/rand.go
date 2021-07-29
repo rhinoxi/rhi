@@ -1,13 +1,14 @@
-package cmd
+package rand
 
 import (
 	"fmt"
-	"github.com/spf13/cobra"
 	"math/rand"
-	"os"
 	"strconv"
 	"strings"
 	"time"
+
+	"github.com/sirupsen/logrus"
+	"github.com/spf13/cobra"
 )
 
 const  (
@@ -28,14 +29,14 @@ func NewRandCmd() *cobra.Command {
 	randCmd := &cobra.Command{
 		Use: "rand",
 		Short: "Generate random string/int",
+		Args: cobra.MaximumNArgs(1),
 		Run: func(cmd *cobra.Command, args []string) {
 			length := 8
 			var err error
 			if len(args) > 0 {
 				length, err = strconv.Atoi(args[0])
 				if err != nil {
-					fmt.Printf("length should be int, got %s\n", args[0])
-					os.Exit(1)
+					logrus.Fatalf("length should be int, got %s\n", args[0])
 				}
 			}
 			r := randomString(length, allowedUpper, allowedSymbol)

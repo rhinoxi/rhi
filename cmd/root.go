@@ -1,6 +1,8 @@
 package cmd
 
 import (
+	"github.com/rhinoxi/rhi/cmd/cli"
+	"github.com/rhinoxi/rhi/cmd/rand"
 	"github.com/spf13/cobra"
 )
 
@@ -14,5 +16,6 @@ func Execute() error {
 }
 
 func init() {
-	rootCmd.AddCommand(NewRandCmd())
+	rootCmd.AddCommand(rand.NewRandCmd())
+	rootCmd.AddCommand(cli.NewCliCmd())
 }
