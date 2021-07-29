@@ -27,9 +27,10 @@ var (
 
 func NewRandCmd() *cobra.Command {
 	randCmd := &cobra.Command{
-		Use: "rand",
-		Short: "Generate random string/int",
+		Use: "rand [<len>]",
+		Short: "Generate random string",
 		Args: cobra.MaximumNArgs(1),
+		DisableFlagsInUseLine: true,
 		Run: func(cmd *cobra.Command, args []string) {
 			length := 8
 			var err error

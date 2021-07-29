@@ -18,10 +18,20 @@ func getCliKeys() []string {
 	return keys
 }
 
+func parenKeys(keys []string) string {
+	p := make([]string, len(keys))
+	for i, k := range keys {
+		p[i] = "[" + k + "]"
+	}
+	return strings.Join(p, " ")
+}
+
 func NewCliCmd() *cobra.Command {
+	cliKeys := getCliKeys()
 	return &cobra.Command{
-		Use: "cli",
+		Use: "cli " + parenKeys(cliKeys),
 		Short: "show cli usage",
+		DisableFlagsInUseLine: true,
 		Run: func(cmd *cobra.Command, args []string) {
 			var sb strings.Builder
 			for _, arg := range args {
@@ -34,6 +44,6 @@ func NewCliCmd() *cobra.Command {
 			}
 			fmt.Println(sb.String())
 		},
-		ValidArgs: getCliKeys(),
+		ValidArgs: cliKeys,
 	}
 }

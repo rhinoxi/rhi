@@ -3,6 +3,7 @@ package cmd
 import (
 	"github.com/rhinoxi/rhi/cmd/cli"
 	"github.com/rhinoxi/rhi/cmd/rand"
+	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 )
 
@@ -16,6 +17,10 @@ func Execute() error {
 }
 
 func init() {
+	logrus.SetFormatter(&logrus.TextFormatter{
+		DisableTimestamp: true,
+		DisableQuote: true,
+	})
 	rootCmd.AddCommand(rand.NewRandCmd())
 	rootCmd.AddCommand(cli.NewCliCmd())
 }
