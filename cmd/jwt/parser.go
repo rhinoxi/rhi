@@ -4,11 +4,12 @@ import (
 	"crypto/rsa"
 	"encoding/json"
 	"fmt"
+	"io/ioutil"
+	"strings"
+
 	"github.com/golang-jwt/jwt"
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
-	"io/ioutil"
-	"strings"
 )
 
 func getKeyFunc(algStr string) (keyFunc jwt.Keyfunc, err error) {
@@ -38,9 +39,9 @@ func readRsaPublicKey(fn string) (*rsa.PublicKey, error) {
 
 func newTokenParser() *cobra.Command {
 	cmd := &cobra.Command{
-		Use: "parse <jwt token>",
-		Short: "parse jwt token to json",
-		Args: cobra.ExactArgs(1),
+		Use:                   "parse <jwt token>",
+		Short:                 "parse jwt token to json",
+		Args:                  cobra.ExactArgs(1),
 		DisableFlagsInUseLine: true,
 		Run: func(cmd *cobra.Command, args []string) {
 			tokenStr := args[0]
@@ -60,5 +61,6 @@ func newTokenParser() *cobra.Command {
 	}
 	cmd.Flags().StringVarP(&ps.key, "key", "k", "", "key")
 	cmd.Flags().StringVar(&ps.algStr, "alg", "hs256", "alg")
+	cmd.MarkFlagRequired("key")
 	return cmd
 }

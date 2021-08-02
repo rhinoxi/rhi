@@ -4,16 +4,17 @@ import (
 	"crypto/rsa"
 	"encoding/json"
 	"fmt"
+	"io/ioutil"
+	"strings"
+
 	"github.com/golang-jwt/jwt"
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
-	"io/ioutil"
-	"strings"
 )
 
 type params struct {
-	key string
-	algStr string
+	key       string
+	algStr    string
 	claimFile string
 }
 
@@ -28,7 +29,6 @@ var (
 		"rs512": jwt.SigningMethodRS512,
 	}
 )
-
 
 type claims map[string]interface{}
 
@@ -51,7 +51,7 @@ func readRsaPrivateKey(fn string) (*rsa.PrivateKey, error) {
 
 func getSignMethodAndKey(algStr string) (jwt.SigningMethod, interface{}, error) {
 	algStr = strings.ToLower(algStr)
-	var alg	jwt.SigningMethod
+	var alg jwt.SigningMethod
 	var key interface{}
 	switch algStr {
 	case "hs256", "hs384", "hs512":
@@ -77,8 +77,8 @@ func sign(alg jwt.SigningMethod, key interface{}, m claims) (string, error) {
 
 func newTokenGenerator() *cobra.Command {
 	cmd := &cobra.Command{
-		Use: "sign",
-		Short: "jwt token generator",
+		Use:                   "sign -c <file> -k <key>",
+		Short:                 "jwt token generator",
 		DisableFlagsInUseLine: true,
 		Run: func(cmd *cobra.Command, args []string) {
 			alg, key, err := getSignMethodAndKey(ps.algStr)
@@ -100,7 +100,9 @@ func newTokenGenerator() *cobra.Command {
 		},
 	}
 	cmd.Flags().StringVarP(&ps.claimFile, "claim", "c", "", "claim json file")
-	cmd.Flags().StringVarP(&ps.key, "key", "k", "", "key")
+	cmd.Flags().StringVarP(&ps.key, "key", "k", "", "key string(hmac-sha)/filepath(rsa)")
 	cmd.Flags().StringVar(&ps.algStr, "alg", "hs256", "alg")
+	cmd.MarkFlagRequired("claim")
+	cmd.MarkFlagRequired("key")
 	return cmd
 }
