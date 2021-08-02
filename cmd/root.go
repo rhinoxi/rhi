@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"github.com/rhinoxi/rhi/cmd/cli"
+	"github.com/rhinoxi/rhi/cmd/jwt"
 	"github.com/rhinoxi/rhi/cmd/rand"
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
@@ -23,4 +24,5 @@ func init() {
 	})
 	rootCmd.AddCommand(rand.NewRandCmd())
 	rootCmd.AddCommand(cli.NewCliCmd())
+	rootCmd.AddCommand(jwt.NewJwtCmd())
 }
