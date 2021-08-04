@@ -1,18 +1,15 @@
-package cli
+package cs
 
 import (
 	"fmt"
-	"github.com/spf13/cobra"
 	"strings"
+
+	"github.com/spf13/cobra"
 )
 
-var cliMap = map[string]string{
-	"grpc-go": `protoc --go_out=. --go_opt=paths=source_relative --go-grpc_out=. --go-grpc_opt=paths=source_relative <path/to/proto>`,
-}
-
-func getCliKeys() []string {
-	keys := make([]string, 0, len(cliMap))
-	for key := range cliMap {
+func getCsKeys() []string {
+	keys := make([]string, 0, len(cheatsheet))
+	for key := range cheatsheet {
 		keys = append(keys, key)
 	}
 	return keys
@@ -26,16 +23,19 @@ func parenKeys(keys []string) string {
 	return strings.Join(p, " ")
 }
 
-func NewCliCmd() *cobra.Command {
-	cliKeys := getCliKeys()
+func NewCsCmd() *cobra.Command {
+	csKeys := getCsKeys()
 	return &cobra.Command{
-		Use: "cli " + parenKeys(cliKeys),
-		Short: "show cli usage",
+		Use:                   "cs " + parenKeys(csKeys),
+		Short:                 "show cheatsheet",
 		DisableFlagsInUseLine: true,
 		Run: func(cmd *cobra.Command, args []string) {
 			var sb strings.Builder
+			if len(args) == 0 {
+				args = csKeys
+			}
 			for _, arg := range args {
-				if line := cliMap[arg]; line != "" {
+				if line := cheatsheet[arg]; line != "" {
 					sb.WriteString(arg)
 					sb.WriteString("\n\t")
 					sb.WriteString(line)
@@ -44,6 +44,6 @@ func NewCliCmd() *cobra.Command {
 			}
 			fmt.Println(sb.String())
 		},
-		ValidArgs: cliKeys,
+		ValidArgs: csKeys,
 	}
 }

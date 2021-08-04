@@ -1,7 +1,7 @@
 package cmd
 
 import (
-	"github.com/rhinoxi/rhi/cmd/cli"
+	"github.com/rhinoxi/rhi/cmd/cs"
 	"github.com/rhinoxi/rhi/cmd/jwt"
 	"github.com/rhinoxi/rhi/cmd/rand"
 	"github.com/sirupsen/logrus"
@@ -9,7 +9,7 @@ import (
 )
 
 var rootCmd = &cobra.Command{
-	Use: "rhi",
+	Use:   "rhi",
 	Short: "rhi is the cli kits for rhinoxi",
 }
 
@@ -20,9 +20,9 @@ func Execute() error {
 func init() {
 	logrus.SetFormatter(&logrus.TextFormatter{
 		DisableTimestamp: true,
-		DisableQuote: true,
+		DisableQuote:     true,
 	})
 	rootCmd.AddCommand(rand.NewRandCmd())
-	rootCmd.AddCommand(cli.NewCliCmd())
+	rootCmd.AddCommand(cs.NewCsCmd())
 	rootCmd.AddCommand(jwt.NewJwtCmd())
 }
