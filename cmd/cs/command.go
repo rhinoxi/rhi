@@ -9,7 +9,15 @@ import (
 
 const (
 	indentCharacter = "    "
+	Red             = "\033[31m"
+	Green           = "\033[32m"
+	Yellow          = "\033[33m"
+	Blue            = "\033[34m"
+	Purple          = "\033[35m"
+	Cyan            = "\033[36m"
 )
+
+var colors = []string{Green, Yellow, Blue, Purple, Cyan}
 
 func getCsKeys() []string {
 	keys := make([]string, 0, len(csm))
@@ -27,12 +35,18 @@ func parenKeys(keys []string) string {
 	return strings.Join(p, " ")
 }
 
+func pickColor(n int) string {
+	return colors[n%len(colors)]
+}
+
 type cmdFormatter struct {
 	sb strings.Builder
 }
 
 func (cf *cmdFormatter) add(key string, value interface{}, indent int) {
+	cf.sb.WriteString(pickColor(indent))
 	cf.sb.WriteString(key)
+	cf.sb.WriteString("\033[0m")
 	cf.sb.WriteString("\n")
 	for i := 0; i <= indent; i++ {
 		cf.sb.WriteString(indentCharacter)
