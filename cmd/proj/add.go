@@ -1,65 +1,15 @@
 package proj
 
 import (
-	"encoding/json"
 	"fmt"
 	"os"
-	"regexp"
 	"strings"
+
+	"github.com/rhinoxi/rhi/cmd/config"
 
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 )
-
-type config struct {
-	Projects []string `json:"projects"`
-}
-
-func (c *config) addProject(s string) {
-	for _, p := range c.Projects {
-		if p == s {
-			return
-		}
-	}
-	c.Projects = append(c.Projects, s)
-}
-
-func (c *config) Save() error {
-	f, err := os.Create(getConfigFilePath())
-	if err != nil {
-		return err
-	}
-	defer f.Close()
-	enc := json.NewEncoder(f)
-	enc.SetIndent("", "\t")
-	return enc.Encode(c)
-}
-
-func (c *config) PickProjects(kw string) string {
-	pattern := strings.Join(strings.Split(kw, ""), ".*")
-	m, _ := regexp.Compile(pattern)
-
-	for _, p := range c.Projects {
-		if m.MatchString(p) {
-			return p
-		}
-	}
-	return ""
-}
-
-func loadConfig() (*config, error) {
-	var c config
-	p := getConfigFilePath()
-	f, err := os.Open(p)
-	if err != nil {
-		return &c, nil
-	}
-	defer f.Close()
-	if err := json.NewDecoder(f).Decode(&c); err != nil {
-		return nil, err
-	}
-	return &c, nil
-}
 
 func newAddProject() *cobra.Command {
 	return &cobra.Command{
@@ -68,7 +18,7 @@ func newAddProject() *cobra.Command {
 		DisableFlagsInUseLine: true,
 		Run: func(cmd *cobra.Command, args []string) {
 			// load config
-			c, err := loadConfig()
+			c, err := config.LoadConfig()
 			if err != nil {
 				logrus.Fatal(err)
 			}
@@ -87,7 +37,7 @@ func newAddProject() *cobra.Command {
 					logrus.Error(fmt.Errorf("%s is a file, not folder", folder))
 					continue
 				}
-				c.addProject(folder)
+				c.AddProject(folder)
 			}
 			c.Save()
 		},

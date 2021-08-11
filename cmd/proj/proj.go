@@ -5,13 +5,13 @@ import (
 	"os"
 	"path"
 
+	"github.com/rhinoxi/rhi/cmd/config"
+	"github.com/rhinoxi/rhi/cmd/initRhi"
 	"github.com/spf13/cobra"
 )
 
 const (
-	config_folder = ".rhi"
-	config_file   = "config.json"
-	shell_file    = "rhi_proj.sh"
+	shell_file = "rhi_proj.sh"
 )
 
 func NewCmd() *cobra.Command {
@@ -21,26 +21,18 @@ func NewCmd() *cobra.Command {
 	}
 	cmd.AddCommand(newAddProject())
 	cmd.AddCommand(newShowProjects())
+	cmd.AddCommand(newRemoveProject())
 
 	return cmd
 }
 
-func getConfigPath() string {
-	dirname, _ := os.UserHomeDir()
-	return path.Join(dirname, config_folder)
-}
-
-func getConfigFilePath() string {
-	return path.Join(getConfigPath(), config_file)
-}
-
 func getConfigShellPath() string {
-	return path.Join(getConfigPath(), shell_file)
+	return path.Join(config.GetConfigDir(), shell_file)
 }
 
-func GenShellFile() {
+func genShellFile() {
 	shell := `
-p() {
+pcd() {
 	local output="$(rhi proj show ${1})"
 	if [ -z "${1}" ]
 	then
@@ -54,9 +46,9 @@ p() {
 	fi
 }
 
-pa() {
+padd() {
 	local folder=${1}
-	[ -z $folder ] && return
+	[ -z $folder ] && folder="."
 	if [[ $folder != /* ]]
 	then
 		if [ -d $folder ]
@@ -73,6 +65,12 @@ pa() {
 	cd $folder
 	rhi proj add $folder
 }
+
+prm() {
+	local folder=${1}
+	[ -z $folder ] && return
+	rhi proj rm $folder
+}
 `
 
 	f, err := os.Create(getConfigShellPath())
@@ -86,11 +84,5 @@ pa() {
 }
 
 func init() {
-	dirname, err := os.UserHomeDir()
-	if err != nil {
-		panic(err)
-	}
-	if err := os.MkdirAll(path.Join(dirname, config_folder), 0755); err != nil {
-		panic(err)
-	}
+	initRhi.Register(genShellFile)
 }
