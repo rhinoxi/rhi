@@ -11,25 +11,24 @@ import (
 	"github.com/spf13/cobra"
 )
 
-const  (
-	Letters = "0123456789abcdefghijklmnopqrstuvwxyz"
+const (
+	Letters      = "0123456789abcdefghijklmnopqrstuvwxyz"
 	UpperLetters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-	Symbol = "!_@#$%&"
+	Symbol       = "!_@#$%&"
 )
 
-
 var (
-	upper bool
-	typ string
-	allowedUpper bool
+	upper         bool
+	typ           string
+	allowedUpper  bool
 	allowedSymbol bool
 )
 
-func NewRandCmd() *cobra.Command {
+func NewCmd() *cobra.Command {
 	randCmd := &cobra.Command{
-		Use: "rand [<len>]",
-		Short: "Generate random string",
-		Args: cobra.MaximumNArgs(1),
+		Use:                   "rand [<len>]",
+		Short:                 "Generate random string",
+		Args:                  cobra.MaximumNArgs(1),
 		DisableFlagsInUseLine: true,
 		Run: func(cmd *cobra.Command, args []string) {
 			length := 8

@@ -66,7 +66,7 @@ func (cf cmdFormatter) String() string {
 	return cf.sb.String()
 }
 
-func NewCsCmd() *cobra.Command {
+func NewCmd() *cobra.Command {
 	csKeys := getCsKeys()
 	return &cobra.Command{
 		Use:                   "cs " + parenKeys(csKeys),

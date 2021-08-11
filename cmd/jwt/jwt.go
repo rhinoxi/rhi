@@ -2,10 +2,10 @@ package jwt
 
 import "github.com/spf13/cobra"
 
-func NewJwtCmd() *cobra.Command {
+func NewCmd() *cobra.Command {
 	cmd := &cobra.Command{
-		Use: "jwt",
-		Short: "jwt token generator/parser",
+		Use:                   "jwt",
+		Short:                 "jwt token generator/parser",
 		DisableFlagsInUseLine: true,
 	}
 	cmd.AddCommand(newTokenGenerator())

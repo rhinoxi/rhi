@@ -2,7 +2,9 @@ package cmd
 
 import (
 	"github.com/rhinoxi/rhi/cmd/cs"
+	"github.com/rhinoxi/rhi/cmd/initRhi"
 	"github.com/rhinoxi/rhi/cmd/jwt"
+	"github.com/rhinoxi/rhi/cmd/proj"
 	"github.com/rhinoxi/rhi/cmd/rand"
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
@@ -22,7 +24,9 @@ func init() {
 		DisableTimestamp: true,
 		DisableQuote:     true,
 	})
-	rootCmd.AddCommand(rand.NewRandCmd())
-	rootCmd.AddCommand(cs.NewCsCmd())
-	rootCmd.AddCommand(jwt.NewJwtCmd())
+	rootCmd.AddCommand(initRhi.NewCmd())
+	rootCmd.AddCommand(rand.NewCmd())
+	rootCmd.AddCommand(cs.NewCmd())
+	rootCmd.AddCommand(jwt.NewCmd())
+	rootCmd.AddCommand(proj.NewCmd())
 }
