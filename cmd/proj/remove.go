@@ -3,7 +3,6 @@ package proj
 import (
 	"fmt"
 
-	"github.com/rhinoxi/rhi/cmd/config"
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 )
@@ -15,16 +14,16 @@ func newRemoveProject() *cobra.Command {
 		DisableFlagsInUseLine: true,
 		Args:                  cobra.MinimumNArgs(1),
 		Run: func(cmd *cobra.Command, args []string) {
-			c, err := config.LoadConfig()
+			d, err := LoadData()
 			if err != nil {
 				logrus.Fatal(err)
 			}
 			for _, folder := range args {
-				if c.RemoveProject(folder) {
+				if d.RemoveProject(folder) {
 					fmt.Printf("%s has been removed\n", folder)
 				}
 			}
-			c.Save()
+			d.Save()
 		},
 	}
 }

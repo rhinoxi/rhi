@@ -4,20 +4,12 @@ import (
 	"fmt"
 	"strings"
 
+	"github.com/rhinoxi/rhi/constant"
+
 	"github.com/spf13/cobra"
 )
 
-const (
-	indentCharacter = "    "
-	Red             = "\033[31m"
-	Green           = "\033[32m"
-	Yellow          = "\033[33m"
-	Blue            = "\033[34m"
-	Purple          = "\033[35m"
-	Cyan            = "\033[36m"
-)
-
-var colors = []string{Green, Yellow, Blue, Purple, Cyan}
+var colors = []string{constant.Green, constant.Yellow, constant.Blue, constant.Purple, constant.Cyan}
 
 func getCsKeys() []string {
 	keys := make([]string, 0, len(csm))
@@ -46,10 +38,10 @@ type cmdFormatter struct {
 func (cf *cmdFormatter) add(key string, value interface{}, indent int) {
 	cf.sb.WriteString(pickColor(indent))
 	cf.sb.WriteString(key)
-	cf.sb.WriteString("\033[0m")
+	cf.sb.WriteString(constant.ColorReset)
 	cf.sb.WriteString("\n")
 	for i := 0; i <= indent; i++ {
-		cf.sb.WriteString(indentCharacter)
+		cf.sb.WriteString(constant.IndentCharacter)
 	}
 	switch tv := value.(type) {
 	case string:

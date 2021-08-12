@@ -6,41 +6,53 @@ import (
 	"regexp"
 	"strings"
 
-	"github.com/rhinoxi/rhi/cmd/config"
+	"github.com/rhinoxi/rhi/constant"
 
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 )
 
-func printProjects(projects []string) {
+func printProjects(projects []proj) {
 	if len(projects) == 0 {
 		fmt.Println("no project")
 	}
-	for _, folder := range projects {
-		fmt.Println(folder)
+	var sb strings.Builder
+	for _, p := range projects {
+		sb.WriteString(constant.Green)
+		sb.WriteString(p.Key())
+		sb.WriteString(constant.ColorReset)
+		sb.WriteString(": ")
+		sb.WriteString(p.Value())
+		sb.WriteString("\n")
 	}
+	fmt.Print(sb.String())
 }
 
-func pickProjects(projects []string, kw string) string {
+func pickProjects(projects []proj, kw string) proj {
 	pattern := strings.Join(strings.Split(kw, ""), ".*")
-	m, _ := regexp.Compile(pattern)
+	m, _ := regexp.Compile("(?i)" + pattern)
 
-	// search basename first
+	// search key first
 	for _, p := range projects {
-		base := path.Base(p)
-		if m.MatchString(base) {
+		if m.MatchString(p.Key()) {
+			return p
+		}
+	}
+
+	// search basename second
+	for _, p := range projects {
+		if m.MatchString(path.Base(p.Value())) {
 			return p
 		}
 	}
 
 	// search whole path
 	for _, p := range projects {
-		p = path.Base(p)
-		if m.MatchString(p) {
+		if m.MatchString(p.Value()) {
 			return p
 		}
 	}
-	return ""
+	return nil
 }
 
 func newShowProjects() *cobra.Command {
@@ -50,17 +62,17 @@ func newShowProjects() *cobra.Command {
 		DisableFlagsInUseLine: true,
 		Args:                  cobra.MaximumNArgs(1),
 		Run: func(cmd *cobra.Command, args []string) {
-			c, err := config.LoadConfig()
+			d, err := LoadData()
 			if err != nil {
 				logrus.Fatal(err)
 			}
-			projects := c.Projects
+			projects := d.Projects
 			if len(args) > 0 {
 				project := pickProjects(projects, args[0])
-				if project == "" {
+				if project == nil {
 					return
 				}
-				projects = []string{project}
+				projects = []proj{project}
 			}
 			printProjects(projects)
 		},

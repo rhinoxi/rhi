@@ -7,14 +7,10 @@ import (
 	"strings"
 	"time"
 
+	"github.com/rhinoxi/rhi/constant"
+
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
-)
-
-const (
-	Letters      = "0123456789abcdefghijklmnopqrstuvwxyz"
-	UpperLetters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-	Symbol       = "!_@#$%&"
 )
 
 var (
@@ -53,12 +49,12 @@ func NewCmd() *cobra.Command {
 }
 
 func randomString(n int, allowedUpper bool, allowedSymbol bool) string {
-	letters := Letters
+	letters := constant.Letters
 	if allowedUpper {
-		letters += UpperLetters
+		letters += constant.UpperLetters
 	}
 	if allowedSymbol {
-		letters += Symbol
+		letters += constant.Symbol
 	}
 	rand.Seed(time.Now().UnixNano())
 	b := make([]byte, n)

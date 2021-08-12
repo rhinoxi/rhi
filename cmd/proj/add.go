@@ -5,8 +5,6 @@ import (
 	"os"
 	"strings"
 
-	"github.com/rhinoxi/rhi/cmd/config"
-
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 )
@@ -18,7 +16,7 @@ func newAddProject() *cobra.Command {
 		DisableFlagsInUseLine: true,
 		Run: func(cmd *cobra.Command, args []string) {
 			// load config
-			c, err := config.LoadConfig()
+			d, err := LoadData()
 			if err != nil {
 				logrus.Fatal(err)
 			}
@@ -37,9 +35,9 @@ func newAddProject() *cobra.Command {
 					logrus.Error(fmt.Errorf("%s is a file, not folder", folder))
 					continue
 				}
-				c.AddProject(folder)
+				d.AddProject(folder)
 			}
-			c.Save()
+			d.Save()
 		},
 	}
 }
