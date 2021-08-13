@@ -15,7 +15,7 @@ func NewCmd() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:                   "ascart <image>",
 		Short:                 "convert image to ascii art",
-		Args:                  cobra.MaximumNArgs(1),
+		Args:                  cobra.ExactArgs(1),
 		DisableFlagsInUseLine: true,
 		Run: func(cmd *cobra.Command, args []string) {
 			im, err := readImage(args[0])
