@@ -33,6 +33,10 @@ padd() {
 	rhi proj add "$folder"
 }
 
+prename() {
+  rhi proj rename "${@}"
+}
+
 prm() {
 	[ -z "$*" ] && return
 	rhi proj rm "${@}"

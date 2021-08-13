@@ -35,7 +35,7 @@ func newAddProject() *cobra.Command {
 					logrus.Error(fmt.Errorf("%s is a file, not folder", folder))
 					continue
 				}
-				d.AddProject(folder)
+				d.Add(folder)
 			}
 			d.Save()
 		},

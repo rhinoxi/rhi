@@ -38,7 +38,7 @@ func (d *ProjectData) Save() error {
 	return enc.Encode(d)
 }
 
-func (d *ProjectData) AddProject(s string) {
+func (d *ProjectData) Add(s string) {
 	b := path.Base(s)
 	suf := 1
 	bsuf := b
@@ -54,7 +54,29 @@ func (d *ProjectData) AddProject(s string) {
 	d.Projects = append(d.Projects, proj{bsuf, s})
 }
 
-func (d *ProjectData) RemoveProject(s string) bool {
+func (d *ProjectData) isShortNameExist(s string) bool {
+	for _, p := range d.Projects {
+		if p.Key() == s {
+			return true
+		}
+	}
+	return false
+}
+
+func (d *ProjectData) Rename(old, new string) error {
+	for i, p := range d.Projects {
+		if p.Key() == old {
+			if !d.isShortNameExist(new) {
+				d.Projects[i] = NewProj(new, p.Value())
+				return nil
+			}
+			return fmt.Errorf("new name %s already exists", new)
+		}
+	}
+	return fmt.Errorf("%s does not exist", old)
+}
+
+func (d *ProjectData) Remove(s string) bool {
 	for i, p := range d.Projects {
 		if p.Value() == s {
 			d.Projects = append(d.Projects[:i], d.Projects[i+1:]...)
@@ -89,11 +111,16 @@ func NewCmd() *cobra.Command {
 	cmd.AddCommand(newAddProject())
 	cmd.AddCommand(newShowProjects())
 	cmd.AddCommand(newRemoveProject())
+	cmd.AddCommand(newRenameProject())
 
 	return cmd
 }
 
 type proj []string
+
+func NewProj(key, value string) proj {
+	return []string{key, value}
+}
 
 func (p proj) Key() string {
 	return p[0]

@@ -96,7 +96,7 @@ func newTokenGenerator() *cobra.Command {
 				logrus.Fatal(err)
 			}
 
-			logrus.Info(tokenStr)
+			fmt.Println(tokenStr)
 		},
 	}
 	cmd.Flags().StringVarP(&ps.claimFile, "claim", "c", "", "claim json file")

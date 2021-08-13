@@ -56,7 +56,7 @@ func newTokenParser() *cobra.Command {
 			}
 
 			b, _ := json.MarshalIndent(t, "", "\t")
-			logrus.Info("\n" + string(b))
+			fmt.Println("\n" + string(b))
 		},
 	}
 	cmd.Flags().StringVarP(&ps.key, "key", "k", "", "key")

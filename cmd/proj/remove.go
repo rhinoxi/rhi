@@ -19,7 +19,7 @@ func newRemoveProject() *cobra.Command {
 				logrus.Fatal(err)
 			}
 			for _, folder := range args {
-				if d.RemoveProject(folder) {
+				if d.Remove(folder) {
 					fmt.Printf("%s has been removed\n", folder)
 				}
 			}
