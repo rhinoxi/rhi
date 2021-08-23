@@ -34,6 +34,12 @@ func pickProjects(projects []proj, kw string) proj {
 
 	// search key first
 	for _, p := range projects {
+		if p.Key() == kw {
+			return p
+		}
+	}
+
+	for _, p := range projects {
 		if m.MatchString(p.Key()) {
 			return p
 		}
