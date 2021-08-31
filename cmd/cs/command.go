@@ -36,15 +36,18 @@ type cmdFormatter struct {
 }
 
 func (cf *cmdFormatter) add(key string, value interface{}, indent int) {
+	for i := 0; i < indent; i++ {
+		cf.sb.WriteString(constant.IndentCharacter)
+	}
 	cf.sb.WriteString(pickColor(indent))
 	cf.sb.WriteString(key)
 	cf.sb.WriteString(constant.ColorReset)
 	cf.sb.WriteString("\n")
-	for i := 0; i <= indent; i++ {
-		cf.sb.WriteString(constant.IndentCharacter)
-	}
 	switch tv := value.(type) {
 	case string:
+		for i := 0; i <= indent; i++ {
+			cf.sb.WriteString(constant.IndentCharacter)
+		}
 		cf.sb.WriteString(tv)
 		cf.sb.WriteString("\n")
 	case csType:
