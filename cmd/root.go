@@ -3,6 +3,7 @@ package cmd
 import (
 	"github.com/rhinoxi/rhi/cmd/ascart"
 	"github.com/rhinoxi/rhi/cmd/cs"
+	"github.com/rhinoxi/rhi/cmd/dl"
 	"github.com/rhinoxi/rhi/cmd/initRhi"
 	"github.com/rhinoxi/rhi/cmd/jwt"
 	"github.com/rhinoxi/rhi/cmd/proj"
@@ -31,4 +32,5 @@ func init() {
 	rootCmd.AddCommand(jwt.NewCmd())
 	rootCmd.AddCommand(proj.NewCmd())
 	rootCmd.AddCommand(ascart.NewCmd())
+	rootCmd.AddCommand(dl.NewCmd())
 }
