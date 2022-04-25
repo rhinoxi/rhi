@@ -56,8 +56,6 @@ func readImage(p string) (image.Image, error) {
 	if err != nil {
 		return nil, err
 	}
-	fmt.Println(im.Bounds().Min.X, im.Bounds().Min.Y)
-	fmt.Println(im.Bounds().Max.X, im.Bounds().Max.Y)
 	return im, nil
 }
 
@@ -97,7 +95,6 @@ func grayToAscii(gray *image.RGBA) ([]string, error) {
 		ascHeight = getHeightByWidth(imSize.width, imSize.height, ascWidth)
 	}
 	ascSize := size{ascWidth, ascHeight}
-	fmt.Println(ascSize)
 
 	if ascSize.width > termSize.width || ascSize.height > termSize.height {
 		ascSize.width = termSize.width
@@ -107,7 +104,6 @@ func grayToAscii(gray *image.RGBA) ([]string, error) {
 			ascSize.width = getWidthByHeight(imSize.width, imSize.height, ascSize.height)
 		}
 	}
-	fmt.Println(ascSize)
 
 	xStep := float64(imSize.width) / float64(ascSize.width)
 	yStep := float64(imSize.height) / float64(ascSize.height)

@@ -1,16 +1,17 @@
+#!/usr/bin/env bash
 pcd() {
-	local output="$(rhi proj show ${1})"
+	local output
+  output="$(rhi proj show ${1})"
 	if [ -z "${1}" ]
 	then
-		printf '%s' "$output"
+		printf '%s\n' "$output"
 	else
 		if [ -n "$output" ]
 		then
-			printf '%s' "$output"
-			cd $(echo "${output##*:}" | xargs)
+			printf '%s\n' "$output"
+			cd "$(echo ${output##*:} | xargs)"
 		fi
 	fi
-	printf '\n'
 }
 
 padd() {
@@ -18,19 +19,22 @@ padd() {
 	[ -z "$folder" ] && folder="."
 	if [[ $folder != /* ]]
 	then
+    local folder_dir
+    folder_dir=$(dirname $folder)
 		if [ -d $folder ]
 		then
-			folder=$(cd $(cd $(dirname $folder); pwd)/$(basename $folder); pwd)
+			folder=$(cd "$(cd $folder_dir; pwd)/$(basename $folder)"; pwd)
 		elif [ -f "$folder" ]
 		then
-			folder=$(cd $(dirname "$folder"); pwd)
+			folder=$(cd $folder_dir; pwd)
 		else
 			printf '%s not exist\n' "$folder"
 			return
 		fi
 	fi
-	cd "$folder"
-	rhi proj add "$folder"
+  if cd "$folder"; then
+	  rhi proj add "$folder"
+  fi
 }
 
 prename() {
