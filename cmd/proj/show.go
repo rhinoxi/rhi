@@ -7,12 +7,17 @@ import (
 	"strings"
 
 	"github.com/rhinoxi/rhi/constant"
-
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 )
 
 func printProjects(projects []proj) {
+	var longestKeyCount int
+	for _, p := range projects {
+		if len(p.Key()) > longestKeyCount {
+			longestKeyCount = len(p.Key())
+		}
+	}
 	if len(projects) == 0 {
 		fmt.Println("no project")
 	}
@@ -22,6 +27,9 @@ func printProjects(projects []proj) {
 		sb.WriteString(p.Key())
 		sb.WriteString(constant.ColorReset)
 		sb.WriteString(": ")
+		for i := 0; i < longestKeyCount-len(p.Key()); i++ {
+			sb.WriteString(" ")
+		}
 		sb.WriteString(p.Value())
 		sb.WriteString("\n")
 	}
