@@ -8,6 +8,7 @@ import (
 	"github.com/rhinoxi/rhi/cmd/jwt"
 	"github.com/rhinoxi/rhi/cmd/proj"
 	"github.com/rhinoxi/rhi/cmd/rand"
+	"github.com/rhinoxi/rhi/cmd/template"
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 )
@@ -33,4 +34,5 @@ func init() {
 	rootCmd.AddCommand(proj.NewCmd())
 	rootCmd.AddCommand(ascart.NewCmd())
 	rootCmd.AddCommand(dl.NewCmd())
+	rootCmd.AddCommand(template.NewCmd())
 }

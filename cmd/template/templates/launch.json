@@ -1,0 +1,15 @@
+{
+  "version": "1.0.0",
+  "configurations": [
+    {
+      "name": "Debug",
+      "type": "go",
+      "request": "launch",
+      "program": "${workspaceFolder}/main.go",
+      "args": [
+        "--some",
+        "args"
+      ]
+    }
+  ]
+}
